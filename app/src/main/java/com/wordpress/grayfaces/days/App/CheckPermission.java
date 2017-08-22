@@ -20,7 +20,7 @@ public class CheckPermission {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
     }
     /**
-     * @param PERMISSIONS list permissiom to check
+     * @param PERMISSIONS list permissions to check
      * @param PERMISSIONS_REQUEST_ID request permission
      * @param msg message show when at least one permission deny
      * Created by TamNinja on 6/2/2017.
