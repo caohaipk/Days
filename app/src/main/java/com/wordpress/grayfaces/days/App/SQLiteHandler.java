@@ -6,13 +6,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.wordpress.grayfaces.days.Models.Anniversary;
+import com.wordpress.grayfaces.days.Models.AppSetting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Project LamHongDMS
- * Created by pcquy on 3/25/2017.
+ * Project Days
+ * Created by gray on 2/15/2017.
  */
 
-public class SQLiteHandler  extends SQLiteOpenHelper {
+public class SQLiteHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Days";
     public SQLiteHandler(Context context) {
@@ -20,118 +25,239 @@ public class SQLiteHandler  extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE `HT_CONFIG` ( NGUOIDUNG INTEGER, TAIKHOAN NVARCHAR(100), MATKHAU NVARCHAR(100), HOTEN NVARCHAR(100), MANHANSU INTEGER, NGUOIDUNG_NHANSU INTEGER, NHOMNGUOIDUNG INTEGER, TENNHOMNGUOIDUNG NVARCHAR(100), WIDTH INTEGER, HEIGHT INTEGER, QUALITY INTEGER, SAISOVITRI INTEGER, ISCHECKIN INTEGER, ISCHECKOUT INTEGER, MaxGetLocation INTEGER, URLHINH NVARCHAR(250), KEY NVARCHAR(350), PRIMARY KEY(`TAIKHOAN`) )");
-        db.execSQL("CREATE TABLE IF NOT EXISTS  Anniversary ( 'ID' INTEGER, 'Day' NVARCHAR(150)  NULL,PRIMARY KEY(`ID`) )");
+        db.execSQL("CREATE TABLE `APP_SETTING` ( `ISNOTIFY100D` BOOLEAN, `ISNOTIFYANI` BOOLEAN, `ISUSEPASSWORD` BOOLEAN,`PASSWORD` NVARCHAR(6) )");
+        db.execSQL("CREATE TABLE `QL_ANY` ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT, `PERSON1` NVARCHAR(50),`PERSON2` NVARCHAR(50),`TITLE` NVARCHAR(50), `STARTDATE` NVARCHAR(50) )");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS HT_CONFIG");
+        db.execSQL("DROP TABLE IF EXISTS APP_SETTING");
+        db.execSQL("DROP TABLE IF EXISTS QL_ANY");
         onCreate(db);
     }
-    /*public void addConfig(Config config) {
+    public void setAppSettingMacDinh(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("HT_CONFIG", null, null);
         ContentValues values = new ContentValues();
-        values.put("NGUOIDUNG", config.getNGUOIDUNG());
-        values.put("TAIKHOAN", config.getTAIKHOAN());
-        values.put("MATKHAU", config.getMATKHAU());
-        values.put("HOTEN", config.getHOTEN());
-        values.put("MANHANSU", config.getMANHANSU());
-        values.put("NGUOIDUNG_NHANSU",config.getNGUOIDUNG_NHANSU());
-        values.put("NHOMNGUOIDUNG", config.getNHOMNGUOIDUNG());
-        values.put("TENNHOMNGUOIDUNG", config.getTENNHOMNGUOIDUNG());
-        values.put("WIDTH", config.getWIDTH());
-        values.put("HEIGHT", config.getHEIGHT());
-        values.put("QUALITY", config.getQUALITY());
-        values.put("SAISOVITRI", config.getSAISOVITRI());
-        values.put("ISCHECKIN", config.getISCHECKIN());
-        values.put("ISCHECKOUT", config.getISCHECKOUT());
-        values.put("MaxGetLocation",config.getMaxGetLocation());
-        values.put("URLHINH", config.getURLHINH());
-        values.put("KEY", config.getKEY());
-        db.insert("HT_CONFIG", null, values);
+        values.put("ISNOTIFY100D", true);
+        values.put("ISNOTIFYANI", true);
+        values.put("ISUSEPASSWORD", false);
+        db.insert("APP_SETTING", null, values);
         db.close();
     }
-    public int updateConfig(Config config) {
+    public void changeAppSetting(AppSetting setting){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MATKHAU", config.getMATKHAU());
-        values.put("HOTEN", config.getHOTEN());
-        values.put("MANHANSU", config.getMANHANSU());
-        values.put("NGUOIDUNG_NHANSU",config.getNGUOIDUNG_NHANSU());
-        values.put("NHOMNGUOIDUNG", config.getNHOMNGUOIDUNG());
-        values.put("TENNHOMNGUOIDUNG", config.getTENNHOMNGUOIDUNG());
-        values.put("WIDTH", config.getWIDTH());
-        values.put("HEIGHT", config.getHEIGHT());
-        values.put("QUALITY", config.getQUALITY());
-        values.put("SAISOVITRI", config.getSAISOVITRI());
-        values.put("ISCHECKIN", config.getISCHECKIN());
-        values.put("ISCHECKOUT", config.getISCHECKOUT());
-        values.put("MaxGetLocation",config.getMaxGetLocation());
-        values.put("URLHINH", config.getURLHINH());
-        values.put("KEY", config.getKEY());
-        return db.update("HT_CONFIG", values, "TAIKHOAN" + " = ?",
-                new String[] { config.getTAIKHOAN() });
+        values.put("ISNOTIFY100D", setting.isNotify100D());
+        values.put("ISNOTIFYANI", setting.isNotifyANY());
+        values.put("ISUSEPASSWORD", setting.isUsePassword());
+        values.put("PASSWORD", setting.getPassword());
+        db.update("APP_SETTING", values, null, null);
+        db.close();
     }
-    public Config getConfigDetails() {
-        Config config=new Config();
-        String selectQuery = "SELECT  * FROM HT_CONFIG" ;
+
+    public void addAni(Anniversary anniversary){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //values.put("ID", anniversary.getID());
+        values.put("PERSON1", anniversary.getPerson1());
+        values.put("PERSON2", anniversary.getPerson2());
+        values.put("TITLE", anniversary.getTitle());
+        values.put("STARTDATE", anniversary.getStartDate());
+        db.insert("QL_ANY", null, values);
+        db.close();
+    }
+    public int countAni(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT ID FROM QL_ANY",null);
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+        return count;
+    }
+    public List<Anniversary> getAllAni(){
+        List<Anniversary> aniList = new ArrayList<>();
+        String selectQuery = "SELECT  * FROM QL_ANY" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Anniversary ani = new Anniversary();
+                ani.setID(Integer.parseInt(cursor.getString(0)));
+                ani.setPerson1(cursor.getString(1));
+                ani.setPerson2(cursor.getString(2));
+                ani.setTitle(cursor.getString(3));
+                ani.setStartDate(cursor.getString(4));
+
+                aniList.add(ani);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return aniList;
+    }
+    public Anniversary getAni(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("QL_ANY",null,"ID=?",new String[]{String.valueOf(id)},null,null,null );
+        Anniversary ani = null;
+        if (cursor!=null){
+            cursor.moveToFirst();
+            ani = new Anniversary(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+            cursor.close();
+        }
+        return ani;
+    }
+    /*public void addUser(int NGUOIDUNG,String TAIKHOAN,String MATKHAU,String HOTEN,int KHO,int BOPHAN,String sKEY) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("HT_NGUOIDUNG", null, null);
+        ContentValues values = new ContentValues();
+        values.put("NGUOIDUNG", NGUOIDUNG);
+        values.put("TAIKHOAN", TAIKHOAN);
+        values.put("MATKHAU", MATKHAU);
+        values.put("HOTEN", HOTEN);
+        values.put("KHO", KHO);
+        values.put("BOPHAN", BOPHAN);
+        values.put("sKEY", sKEY);
+        db.insert("HT_NGUOIDUNG", null, values);
+        db.close();
+    }
+    public int updateUser(int NGUOIDUNG,String TAIKHOAN,String MATKHAU,String HOTEN,int KHO,int BOPHAN,String sKEY) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("NGUOIDUNG", NGUOIDUNG);
+        values.put("MATKHAU", MATKHAU);
+        values.put("HOTEN", HOTEN);
+        values.put("KHO", KHO);
+        values.put("BOPHAN", BOPHAN);
+        values.put("sKEY", sKEY);
+        return db.update("HT_NGUOIDUNG", values, "TAIKHOAN" + " = ?",
+                new String[] { TAIKHOAN });
+    }
+    public HashMap<String, String> getUserDetails() {
+        HashMap<String, String> user = new HashMap<String, String>();
+        String selectQuery = "SELECT  * FROM HT_NGUOIDUNG" ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            config.setNGUOIDUNG(cursor.getInt(0));
-            config.setTAIKHOAN(cursor.getString(1));
-            config.setMATKHAU(cursor.getString(2));
-            config.setHOTEN(cursor.getString(3));
-            config.setMANHANSU(cursor.getInt(4));
-            config.setNGUOIDUNG_NHANSU(cursor.getInt(5));
-            config.setNHOMNGUOIDUNG(cursor.getInt(6));
-            config.setTENNHOMNGUOIDUNG(cursor.getString(7));
-            config.setWIDTH(cursor.getInt(8));
-            config.setHEIGHT(cursor.getInt(9));
-            config.setQUALITY(cursor.getInt(10));
-            config.setSAISOVITRI(cursor.getInt(11));
-            config.setISCHECKIN(cursor.getInt(12));
-            config.setISCHECKOUT(cursor.getInt(13));
-            config.setMaxGetLocation(cursor.getInt(14));
-            config.setURLHINH(cursor.getString(15));
-            config.setKEY(cursor.getString(16));
+            user.put("NGUOIDUNG", cursor.getString(0));
+            user.put("TAIKHOAN", cursor.getString(1));
+            user.put("MATKHAU", cursor.getString(2));
+            user.put("HOTEN", cursor.getString(3));
+            user.put("KHO", cursor.getString(4));
+            user.put("BOPHAN", cursor.getString(5));
+            user.put("sKEY", cursor.getString(6));
         }
         cursor.close();
         db.close();
-        return config;
+        return user;
     }
-    public  void deleteConfig(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("HT_CONFIG", null, null);
+    public int getUserID() {
+        int ID=0;
+        String selectQuery = "SELECT   * FROM HT_NGUOIDUNG" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            ID=Integer.parseInt(cursor.getString(0));
+        }
+        cursor.close();
         db.close();
+        return ID;
+    }
+    public  void deleteUser(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("HT_NGUOIDUNG", null, null);
+        db.close();
+    }
+    /*public void addNhapKho(NhapKho  nhapKho) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("sKey", nhapKho.getID());
+        values.put("ProductID", nhapKho.getProductID());
+        values.put("ProductNumber", nhapKho.getProductNumber());
+        values.put("ProductName", nhapKho.getProductName());
+        values.put("LotNumber", nhapKho.getLotNumber());
+        values.put("LotNumber2", nhapKho.getLotNumber2());
+        values.put("SoLuong", nhapKho.getSoLuong());
+        values.put("BoxNumber", nhapKho.getBoxNumber());
+        values.put("Serial", nhapKho.getSerial());
+        values.put("ManuDate", nhapKho.getManuDate());
+        values.put("Manufactor", nhapKho.getManufactor());
+        values.put("NguoiDung", nhapKho.getNguoiDung());
+        values.put("NgayQuet", nhapKho.getNgayQuet());
+        values.put("RAW", nhapKho.getRAW());
+        values.put("TonTai", nhapKho.getTonTai());
+        values.put("QuyCach", nhapKho.getQuyCach());
+        db.insert("QL_NHAPKHO", null, values);
+        db.close();
+    }
+    public List<NhapKho> getNhapKhoDetails() {
+       List<NhapKho> nhapkho = new ArrayList<NhapKho>() {
+       };
+        String selectQuery = "SELECT  * FROM QL_NHAPKHO" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        for(int i=0;i<cursor.getCount();i++){
+            cursor.move(1);
+            NhapKho  nk = new NhapKho();
+            nk.setID(cursor.getString(0));
+            nk.setProductID( cursor.getInt(1));
+            nk.setProductNumber( cursor.getString(2));
+            nk.setProductName( cursor.getString(3));
+            nk.setLotNumber( cursor.getString(4));
+            nk.setLotNumber2( cursor.getString(5));
+            nk.setSoLuong( cursor.getInt(6));
+            nk.setBoxNumber( cursor.getString(7));
+            nk.setSerial( cursor.getString(8));
+            nk.setManuDate( cursor.getString(9));
+            nk.setManufactor( cursor.getString(10));
+            nk.setNguoiDung( cursor.getInt(11));
+            nk.setNgayQuet( cursor.getString(12));
+            nk.setRAW( cursor.getString(13));
+            nk.setTonTai( cursor.getInt(14));
+            nk.setQuyCach( cursor.getInt(15));
+            System.out.println("Kho: "+nk);
+            nhapkho.add(nk);
+        }
+        cursor.close();
+        db.close();
+        return nhapkho;
+    }
+    public int checkSanPhamKho(String id){
+        int dem=0;
+        String selectQuery = "SELECT  COUNT(sKey) AS DEM FROM QL_NHAPKHO WHERE sKey='"+id+"'" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            dem= cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return dem;
+    }
+    public int countSanPhamKho(){
+        int dem=0;
+        String selectQuery = "SELECT  COUNT(sKey) AS DEM FROM QL_NHAPKHO";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            dem= cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return dem;
+    }
+    public void deleteSanPhamKho(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("QL_NHAPKHO", "sKey=?", new String[] { id });
+        db.close();
+    }
+    public int updateSoLuong(int SoLuong,String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("SoLuong", SoLuong);
+        return db.update("QL_NHAPKHO", values, "sKey=?",new String[] { id });
     }*/
-    //LOCK TIME
-    public void addLockTime(String Time) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("lock_user", null, null);
-        ContentValues values = new ContentValues();
-        values.put("locktime", Time);
-        db.insert("lock_user", null, values);
-        db.close();
-    }
-    public String getLockTime() {
-        String Time="";
-        String selectQuery = "SELECT   * FROM lock_user" ;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            Time=cursor.getString(0);
-        }
-        cursor.close();
-        db.close();
-        return Time;
-    }
-    public  void deleteLockTime(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("lock_user", null, null);
-        db.close();
-    }
 }
