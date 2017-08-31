@@ -1,14 +1,28 @@
 package com.wordpress.grayfaces.days.Fragment;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.wordpress.grayfaces.days.App.Config;
+import com.wordpress.grayfaces.days.App.SQLiteHandler;
+import com.wordpress.grayfaces.days.Models.Anniversary;
 import com.wordpress.grayfaces.days.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +43,10 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private TextView txtCountDay,txtLeft,txtRight;
+    private ProgressBar progressBarNext100d;
+    private String TAG = "MainActivity";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,15 +84,69 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Render();
+        Render(view);
         return view;
     }
 
-    private void Render(){
+    private void Render(View view){
         getActivity().getActionBar();
         getActivity().setTitle("Home");
+        txtCountDay = (TextView) view.findViewById(R.id.main_txtCountDay);
+        txtLeft = (TextView) view.findViewById(R.id.main_txtLeft);
+        txtRight = (TextView) view.findViewById(R.id.main_txtRight);
+        progressBarNext100d = (ProgressBar) view.findViewById(R.id.progressbarNext100d);
+        initDaysAni();
     }
+    private void initDaysAni(){
+        final SQLiteHandler handler = new SQLiteHandler(getContext());
+        if (handler.countAni()>0){
+            Anniversary ani = handler.getAni(1);
+            Date now = Calendar.getInstance().getTime();
+            Date aniDate;
+            try{
+                aniDate =new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(ani.getStartDate());
+            } catch (Exception e){
+                if (Config.isShowLog){
+                    Log.e(TAG, "initDaysAni: "+e.getMessage() );
+                }
+                aniDate = Calendar.getInstance().getTime();
+            }
+            long diff = (now.getTime()-aniDate.getTime());
+            long countDates = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+            long countLeft,countRight;
+            if (countDates<99){
+                countLeft=0;
 
+            } else {
+                countLeft=countDates/100*100;
+            }
+            countRight=countLeft+100;
+            txtCountDay.setText(String.format("%sd", String.valueOf(countDates)));
+            txtLeft.setText(String.format("%sd", String.valueOf(countLeft)));
+            txtRight.setText(String.format("%sd", String.valueOf(countRight)));
+            progressBarNext100d.setProgress((int)(countRight-countDates));
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DATE);
+            DatePickerDialog datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear)+"/"+String.valueOf(year);
+                    Anniversary aniSet = new Anniversary(0,"Boy","Girl","",date);
+                    handler.addAni(aniSet);
+                    initDaysAni();
+                }
+            },year,month,day);
+            datePicker.setTitle("Chọn ngày...");
+            datePicker.show();
+            /*DialogFragment dFragment = new DatePickerFragment();
+
+            // Show the date picker dialog fragment
+            dFragment.show(getFragmentManager(), "Date Picker");*/
+        }
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

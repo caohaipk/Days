@@ -3,9 +3,8 @@ package com.wordpress.grayfaces.days.UI;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class FontelloTextView extends TextView {
+public class FontelloTextView extends android.support.v7.widget.AppCompatTextView {
 	
 	private static Typeface sFontello;
 
