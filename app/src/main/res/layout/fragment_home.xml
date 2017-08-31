@@ -37,7 +37,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.wordpress.grayfaces.days.UI.Sedgwick_AveTextView
+    <TextView
         android:id="@+id/main_txtCountDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         android:layout_marginBottom="70dp"
         android:orientation="horizontal"
         android:weightSum="10">
-        <com.wordpress.grayfaces.days.UI.Sedgwick_AveTextView
+        <TextView
             android:id="@+id/main_txtLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_weight="9"
             android:max="100"
             android:progress="100"/>
-        <com.wordpress.grayfaces.days.UI.Sedgwick_AveTextView
+        <TextView
             android:id="@+id/main_txtRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

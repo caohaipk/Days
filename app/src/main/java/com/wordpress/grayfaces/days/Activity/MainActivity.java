@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.wordpress.grayfaces.days.Fragment.DatesCalculator;
 import com.wordpress.grayfaces.days.Fragment.HomeFragment;
 import com.wordpress.grayfaces.days.R;
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity
                         LoadHome();
                         break;
                     case R.id.nav_gallery:
-                        Toast.makeText(MainActivity.this, "Gallery", Toast.LENGTH_SHORT).show();
+                        LoadDatesCalculator();
                         break;
                     case R.id.nav_slideshow:
                         Toast.makeText(MainActivity.this, "Slidershow", Toast.LENGTH_SHORT).show();
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         //MenuItem menuItem
         //Get menuItem index 0
         if (savedInstanceState == null) {
-            MenuItem item =  bottomNavigationView.getMenu().getItem(0);
+            MenuItem item =  bottomNavigationView.getMenu().getItem(1);
             bottomNavigationView.setSelectedItemId(item.getItemId());
         }
     }
@@ -131,6 +132,15 @@ public class MainActivity extends AppCompatActivity
                 android.R.anim.fade_out);
         HomeFragment homeFragment = new HomeFragment();
         fragmentTransaction.replace(R.id.content_main, homeFragment, "homeFragment");
+        fragmentTransaction.commitAllowingStateLoss();
+        this.setTitle("");
+    }
+    public  void  LoadDatesCalculator(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        DatesCalculator fragment = new DatesCalculator();
+        fragmentTransaction.replace(R.id.content_main, fragment, "DatesCalculator");
         fragmentTransaction.commitAllowingStateLoss();
         this.setTitle("");
     }
