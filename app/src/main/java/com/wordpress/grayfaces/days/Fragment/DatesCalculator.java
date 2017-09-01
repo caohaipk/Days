@@ -1,14 +1,29 @@
 package com.wordpress.grayfaces.days.Fragment;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.wordpress.grayfaces.days.App.Config;
+import com.wordpress.grayfaces.days.App.SQLiteHandler;
 import com.wordpress.grayfaces.days.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +44,10 @@ public class DatesCalculator extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private String TAG = "DatesCalculatorFragment";
+    private TextView txtStartDate,txtCalDate;
+    private EditText txtNumberDates;
 
     public DatesCalculator() {
         // Required empty public constructor
@@ -65,7 +84,99 @@ public class DatesCalculator extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dates_calculator, container, false);
+        View view = inflater.inflate(R.layout.fragment_dates_calculator, container, false);
+        Render(view);
+        return view;
+    }
+
+    private void Render(View view){
+        getActivity().getActionBar();
+        getActivity().setTitle("Dates Calculator");
+        txtStartDate = (TextView) view.findViewById(R.id.cal_txtStartDate);
+        txtCalDate = (TextView) view.findViewById(R.id.cal_txtCalDate);
+        txtNumberDates = (EditText) view.findViewById(R.id.cal_txtNumberDates);
+        initStartDate();
+    }
+
+    private void initStartDate(){
+        SQLiteHandler handler = new SQLiteHandler(getContext());
+        SQLiteDatabase db = handler.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM QL_ANY",null);
+        if (cursor.getCount()>0){
+            cursor.moveToFirst();
+            String startDate = cursor.getString(cursor.getColumnIndex("STARTDATE"));
+            txtStartDate.setText(startDate);
+            long NumberDates = CalculatorNumberDates(startDate);
+            txtNumberDates.setText(String.valueOf(NumberDates));
+        } else {
+            Date sdate = Calendar.getInstance().getTime();
+            String startDate = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault()).format(sdate);
+            txtStartDate.setText(startDate);
+            long NumberDates = CalculatorNumberDates(startDate);
+            txtNumberDates.setText(String.valueOf(NumberDates));
+        }
+        cursor.close();
+        db.close();
+        String calDate = CountEndDate(txtStartDate.getText().toString(),Integer.parseInt(txtNumberDates.getText().toString()));
+        txtCalDate.setText(calDate);
+        setChange();
+    }
+    private long CalculatorNumberDates(String startDate){
+        Date now = Calendar.getInstance().getTime();
+        Date aniDate;
+        try{
+            aniDate =new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(startDate);
+        } catch (Exception e){
+            if (Config.isShowLog){
+                Log.e(TAG, "initStartDate: "+e.getMessage() );
+            }
+            aniDate = Calendar.getInstance().getTime();
+        }
+        long diff = (now.getTime()-aniDate.getTime());
+        long countDates = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+        return countDates;
+    }
+    private String CountEndDate(String startDate,int numberDates){
+        try {
+            Date sDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(startDate);
+            Calendar calendar=Calendar.getInstance();
+            calendar.setTime(sDate);
+            calendar.add(Calendar.DATE,numberDates);
+            String endDay = new SimpleDateFormat("dd/MM/yyyy",Locale.getDefault()).format(calendar.getTime());
+            return endDay;
+        } catch (Exception ignored){}
+        return "";
+    }
+    private void setChange(){
+        txtStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String calDate = CountEndDate(txtStartDate.getText().toString(),Integer.parseInt(txtNumberDates.getText().toString()));
+                txtCalDate.setText(calDate);
+            }
+        });
+        txtNumberDates.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (txtNumberDates.getText().toString().equals("")){
+                    txtNumberDates.removeTextChangedListener(this);
+                    txtNumberDates.setText("0");
+                    txtNumberDates.addTextChangedListener(this);
+                }
+                String calDate = CountEndDate(txtStartDate.getText().toString(),Integer.parseInt(txtNumberDates.getText().toString()));
+                txtCalDate.setText(calDate);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

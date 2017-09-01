@@ -12,11 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.wordpress.grayfaces.days.Fragment.DatesCalculator;
 import com.wordpress.grayfaces.days.Fragment.HomeFragment;
 import com.wordpress.grayfaces.days.R;
+
+import static com.wordpress.grayfaces.days.Ulti.Utility.hideSoftKeyboard;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity
                     case R.id.nav_home:
                         LoadHome();
                         break;
-                    case R.id.nav_gallery:
+                    case R.id.nav_calculator:
                         LoadDatesCalculator();
                         break;
                     case R.id.nav_slideshow:
@@ -59,12 +65,14 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
+        setupUI(findViewById(R.id.content_main));
         //Render();
         //createView();
         //MenuItem menuItem
         //Get menuItem index 0
         if (savedInstanceState == null) {
-            MenuItem item =  bottomNavigationView.getMenu().getItem(1);
+            MenuItem item =  bottomNavigationView.getMenu().getItem(0);
             bottomNavigationView.setSelectedItemId(item.getItemId());
         }
     }
@@ -124,6 +132,27 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(MainActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
     }
 
     public  void  LoadHome(){
