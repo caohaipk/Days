@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
             DatePickerDialog datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear)+"/"+String.valueOf(year);
+                    String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear+1)+"/"+String.valueOf(year);
                     Anniversary aniSet = new Anniversary(0,"Boy","Girl","",date);
                     handler.addAni(aniSet);
                     initDaysAni();
