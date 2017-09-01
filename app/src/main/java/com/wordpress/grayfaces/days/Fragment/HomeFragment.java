@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment {
                     initDaysAni();
                 }
             },year,month,day);
-            datePicker.setTitle("Chọn ngày...");
+            datePicker.setTitle(getString(R.string.choose_day));
             datePicker.show();
             /*DialogFragment dFragment = new DatePickerFragment();
 

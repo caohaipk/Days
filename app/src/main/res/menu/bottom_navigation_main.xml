@@ -6,12 +6,12 @@
             android:id="@+id/nav_home"
             android:checked="true"
             android:icon="@drawable/ic_menu_home"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_calculator"
             android:checked="false"
             android:icon="@drawable/ic_menu_calculator"
-            android:title="Calculator" />
+            android:title="@string/calculator" />
         <item
             android:id="@+id/nav_slideshow"
             android:checked="false"
@@ -21,7 +21,7 @@
             android:id="@+id/nav_manage"
             android:checked="false"
             android:icon="@drawable/ic_menu_settings"
-            android:title="Settings" />
+            android:title="@string/settings" />
     </group>
 
 </menu>

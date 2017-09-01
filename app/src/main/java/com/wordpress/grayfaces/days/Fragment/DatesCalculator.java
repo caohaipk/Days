@@ -1,5 +1,6 @@
 package com.wordpress.grayfaces.days.Fragment;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -151,8 +153,21 @@ public class DatesCalculator extends Fragment {
         txtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String calDate = CountEndDate(txtStartDate.getText().toString(),Integer.parseInt(txtNumberDates.getText().toString()));
-                txtCalDate.setText(calDate);
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DATE);
+                DatePickerDialog datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear+1)+"/"+String.valueOf(year);
+                        txtStartDate.setText(date);
+                        String calDate = CountEndDate(txtStartDate.getText().toString(),Integer.parseInt(txtNumberDates.getText().toString()));
+                        txtCalDate.setText(calDate);
+                    }
+                },year,month,day);
+                datePicker.setTitle("Chọn ngày...");
+                datePicker.show();
             }
         });
         txtNumberDates.addTextChangedListener(new TextWatcher() {

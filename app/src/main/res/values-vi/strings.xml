@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Days</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="th_is">d là</string>
+    <string name="choose_day">Chọn ngày...</string>
+    <string name="from">Từ</string>
+    <string name="settings">Cài đặt</string>
+    <string name="calculator">Tính ngày</string>
+    <string name="home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>
