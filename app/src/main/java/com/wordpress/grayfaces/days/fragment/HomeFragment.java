@@ -1,10 +1,10 @@
-package com.wordpress.grayfaces.days.Fragment;
+package com.wordpress.grayfaces.days.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +13,10 @@ import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.wordpress.grayfaces.days.App.Config;
-import com.wordpress.grayfaces.days.App.SQLiteHandler;
-import com.wordpress.grayfaces.days.Models.Anniversary;
 import com.wordpress.grayfaces.days.R;
+import com.wordpress.grayfaces.days.app.Config;
+import com.wordpress.grayfaces.days.app.SQLiteHandler;
+import com.wordpress.grayfaces.days.models.Anniversary;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
 
     private TextView txtCountDay,txtLeft,txtRight;
     private ProgressBar progressBarNext100d;
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
     public HomeFragment() {
         // Required empty public constructor

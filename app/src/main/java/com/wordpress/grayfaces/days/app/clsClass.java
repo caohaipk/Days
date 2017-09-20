@@ -1,14 +1,15 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
 
 /**
+ * Project Days
  * Created by pcquy on 1/9/2017.
  */
 
-public class clsClass {
+class clsClass {
     //public  static  String Server_API="http://115.75.3.135/Mobifone_API/DataService.svc/";
     public  static  String Server_API="http://210.211.125.28:8083/DataService.svc/";
     public String decodeString(String encoded) {

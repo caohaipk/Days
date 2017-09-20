@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Gray on 6/2/2017.
  */
 
-public class CheckPermission {
+class CheckPermission {
     private static boolean underAPI23() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
     }

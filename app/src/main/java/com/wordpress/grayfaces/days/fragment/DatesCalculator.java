@@ -1,12 +1,12 @@
-package com.wordpress.grayfaces.days.Fragment;
+package com.wordpress.grayfaces.days.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,9 +17,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.wordpress.grayfaces.days.App.Config;
-import com.wordpress.grayfaces.days.App.SQLiteHandler;
 import com.wordpress.grayfaces.days.R;
+import com.wordpress.grayfaces.days.app.Config;
+import com.wordpress.grayfaces.days.app.SQLiteHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,7 +47,7 @@ public class DatesCalculator extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private String TAG = "DatesCalculatorFragment";
+    private final String TAG = "DatesCalculatorFragment";
     private TextView txtStartDate,txtCalDate;
     private EditText txtNumberDates;
 
@@ -101,7 +101,7 @@ public class DatesCalculator extends Fragment {
     }
 
     private void initStartDate(){
-        SQLiteHandler handler = new SQLiteHandler(getContext());
+        SQLiteHandler handler = new SQLiteHandler(getActivity());
         SQLiteDatabase db = handler.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM QL_ANY",null);
         if (cursor.getCount()>0){
@@ -157,7 +157,7 @@ public class DatesCalculator extends Fragment {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DATE);
-                DatePickerDialog datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear+1)+"/"+String.valueOf(year);

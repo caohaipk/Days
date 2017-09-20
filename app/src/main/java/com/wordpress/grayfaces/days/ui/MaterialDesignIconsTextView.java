@@ -1,11 +1,10 @@
-package com.wordpress.grayfaces.days.UI;
+package com.wordpress.grayfaces.days.ui;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class MaterialDesignIconsTextView extends TextView {
+public class MaterialDesignIconsTextView extends android.support.v7.widget.AppCompatTextView {
 	
 	private static Typeface sMaterialDesignIcons;
 

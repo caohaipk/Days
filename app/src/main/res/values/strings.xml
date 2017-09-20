@@ -7,11 +7,13 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="from">From</string>
     <string name="th_is">th is</string>
     <string name="choose_day">Choose day...</string>
     <string name="calculator">Calculator</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+
 </resources>

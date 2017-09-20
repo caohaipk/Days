@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.UI;
+package com.wordpress.grayfaces.days.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;

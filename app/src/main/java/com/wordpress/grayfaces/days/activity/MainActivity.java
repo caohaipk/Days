@@ -1,10 +1,9 @@
-package com.wordpress.grayfaces.days.Activity;
+package com.wordpress.grayfaces.days.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,11 +17,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.wordpress.grayfaces.days.Fragment.DatesCalculator;
-import com.wordpress.grayfaces.days.Fragment.HomeFragment;
 import com.wordpress.grayfaces.days.R;
+import com.wordpress.grayfaces.days.fragment.DatesCalculator;
+import com.wordpress.grayfaces.days.fragment.HomeFragment;
+import com.wordpress.grayfaces.days.fragment.SettingFragment;
 
-import static com.wordpress.grayfaces.days.Ulti.Utility.hideSoftKeyboard;
+import static com.wordpress.grayfaces.days.ulti.Utility.hideSoftKeyboard;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "Slidershow", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_manage:
-                        Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        LoadSetting();
+                        //Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return true;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void setupUI(View view) {
+    private void setupUI(View view) {
 
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
@@ -155,22 +156,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public  void  LoadHome(){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        HomeFragment homeFragment = new HomeFragment();
-        fragmentTransaction.replace(R.id.content_main, homeFragment, "homeFragment");
-        fragmentTransaction.commitAllowingStateLoss();
-        this.setTitle("");
+    private void  LoadHome(){
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_main, new HomeFragment())
+                .commitAllowingStateLoss();
+        this.setTitle("Home");
     }
-    public  void  LoadDatesCalculator(){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        DatesCalculator fragment = new DatesCalculator();
-        fragmentTransaction.replace(R.id.content_main, fragment, "DatesCalculator");
-        fragmentTransaction.commitAllowingStateLoss();
-        this.setTitle("");
+    private void  LoadDatesCalculator(){
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+//                android.R.anim.fade_out);
+//        DatesCalculator fragment = new DatesCalculator();
+//        fragmentTransaction.replace(R.id.content_main, fragment, "DatesCalculator");
+//        fragmentTransaction.commitAllowingStateLoss();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_main, new DatesCalculator())
+                .commitAllowingStateLoss();
+        this.setTitle("Dates Calculator");
+    }
+    private void  LoadSetting(){
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_main, new SettingFragment())
+                .commitAllowingStateLoss();
+        this.setTitle("Settings");
     }
 }

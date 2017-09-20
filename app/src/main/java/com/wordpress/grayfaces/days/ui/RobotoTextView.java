@@ -1,10 +1,9 @@
-package com.wordpress.grayfaces.days.UI;
+package com.wordpress.grayfaces.days.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.wordpress.grayfaces.days.R;
 
@@ -48,7 +47,7 @@ public class RobotoTextView extends android.support.v7.widget.AppCompatTextView 
 		return getRoboto(getContext(), typeface);
 	}
 	
-	public static Typeface getRoboto(Context context, int typeface) {
+	private static Typeface getRoboto(Context context, int typeface) {
 		switch (typeface) {
 		case Roboto.ROBOTO_BLACK:
 			if (Roboto.sRobotoBlack == null) {

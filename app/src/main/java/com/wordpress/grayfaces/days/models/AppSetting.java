@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.Models;
+package com.wordpress.grayfaces.days.models;
 
 /**
  * Project Days
@@ -6,8 +6,10 @@ package com.wordpress.grayfaces.days.Models;
  */
 
 public class AppSetting {
-    boolean IsNotify100D,IsNotifyANY,IsUsePassword;
-    String Password;
+    private boolean IsNotify100D;
+    private boolean IsNotifyANY;
+    private boolean IsUsePassword;
+    private String Password;
 
     public boolean isNotify100D() {
         return IsNotify100D;

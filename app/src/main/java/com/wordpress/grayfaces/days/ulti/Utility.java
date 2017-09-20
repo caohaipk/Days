@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.Ulti;
+package com.wordpress.grayfaces.days.ulti;
 
 import android.app.Activity;
 import android.view.inputmethod.InputMethodManager;

@@ -1,9 +1,10 @@
-package com.wordpress.grayfaces.days.UI;
+package com.wordpress.grayfaces.days.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 /**
+ * Project Days
  * Created by pcquy on 3/30/2017.
  */
 

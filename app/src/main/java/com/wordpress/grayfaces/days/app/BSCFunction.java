@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.wordpress.grayfaces.days.R;
 
 import org.json.JSONObject;
 
@@ -26,14 +27,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wordpress.grayfaces.days.R;
-
 /**
+ * Project Days
  * Created by pcquy on 3/25/2017.
  */
 
-public class BSCFunction {
-    public static  String SERVER_API="http://112.78.1.209:9001/DataService.svc/";
+class BSCFunction {
+    private static final String SERVER_API="http://112.78.1.209:9001/DataService.svc/";
     public static int STORE=0;
     public static  int ID_LICH=0;
     public static  int NGUOI_DUNG=0;
@@ -71,7 +71,7 @@ public class BSCFunction {
                 listenerError){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
                 headers.put("Accept", "application/json;odata=verbose");
                 headers.put("Authorization", key);
                 return headers;
@@ -100,7 +100,7 @@ public class BSCFunction {
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
                 headers.put("Accept", "application/json;odata=verbose");
                 headers.put("Authorization", key);
                 return headers;
@@ -120,7 +120,7 @@ public class BSCFunction {
         }
         return  text;
     }
-    public  String getHTTPError(int Status){
+    private String getHTTPError(int Status){
         switch (Status){
             case 0: return  "Could not connect to server!";
             case 400: return  "400 Bad Request!";
@@ -164,28 +164,23 @@ public class BSCFunction {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show,final View mPanel,final View mProgressView,Activity activity) {
         try{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-                int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
-                mPanel.setVisibility(show ? View.GONE : View.VISIBLE);
-                mPanel.animate().setDuration(shortAnimTime).alpha(
-                        show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mPanel.setVisibility(show ? View.GONE : View.VISIBLE);
-                    }
-                });
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                mProgressView.animate().setDuration(shortAnimTime).alpha(
-                        show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
-            } else {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                mPanel.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
+            int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
+            mPanel.setVisibility(show ? View.GONE : View.VISIBLE);
+            mPanel.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mPanel.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
         }catch (Exception ex){
 
         }

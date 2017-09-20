@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 /**
  * Project Days
  * Created by pcquy on 2/15/2017.

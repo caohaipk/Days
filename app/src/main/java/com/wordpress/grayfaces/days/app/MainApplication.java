@@ -1,8 +1,8 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 
 import android.app.Application;
 
-import com.wordpress.grayfaces.days.Ulti.TypefaceUtil;
+import com.wordpress.grayfaces.days.ulti.TypefaceUtil;
 
 /**
  * Project Days

@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.App;
+package com.wordpress.grayfaces.days.app;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.wordpress.grayfaces.days.Models.Anniversary;
-import com.wordpress.grayfaces.days.Models.AppSetting;
+import com.wordpress.grayfaces.days.models.Anniversary;
+import com.wordpress.grayfaces.days.models.AppSetting;
 
 import java.util.ArrayList;
 import java.util.List;

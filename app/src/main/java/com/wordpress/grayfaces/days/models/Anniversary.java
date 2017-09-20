@@ -1,4 +1,4 @@
-package com.wordpress.grayfaces.days.Models;
+package com.wordpress.grayfaces.days.models;
 
 /**
  * Project Days
