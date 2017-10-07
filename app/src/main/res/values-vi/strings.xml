@@ -7,8 +7,14 @@
     <string name="from">Từ</string>
     <string name="settings">Cài đặt</string>
     <string name="calculator">Tính ngày</string>
-    <string name="home">Home</string>
+    <string name="home">Trang chính</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_settings">Cài đặt</string>
+    <string name="input_content">Nhập nội dung</string>
+    <string name="not_entered_content">Chưa nhập nội dung</string>
+    <string name="this_ani_settings">Cài đặt của Kỷ Niệm này</string>
+    <string name="using_password">Sử dụng mật khẩu</string>
+    <string name="on_off">Bật/Tắt</string>
+    <string name="sercurity">Bảo mật</string>
 </resources>

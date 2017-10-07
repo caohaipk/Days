@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
+     <!--opens a subscreen of settings-->
+    <PreferenceScreen
+        android:key="button_voicemail_category_key"
+        android:title="@string/this_ani_settings"
+        android:persistent="false">
+        <!--<EditTextPreference-->
+            <!--android:key="username"-->
+            <!--android:summary="Please enter your login username"-->
+            <!--android:title="Username" />-->
+        <!--<EditTextPreference-->
+            <!--android:key="password"-->
+            <!--android:summary="Enter your password"-->
+            <!--android:title="Password" />-->
+    </PreferenceScreen>
+    <!-- app settings -->
     <PreferenceCategory
+        android:summary="Security"
+        android:title="@string/sercurity">
+        <CheckBoxPreference
+            android:key="isusepassword"
+            android:summary="@string/on_off"
+            android:title="@string/using_password"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory
         android:summary="Username and password information"
         android:title="Login information" >
         <EditTextPreference
@@ -12,7 +36,7 @@
             android:key="password"
             android:summary="Enter your password"
             android:title="Password" />
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
     <PreferenceCategory
         android:summary="Username and password information"
@@ -21,6 +45,10 @@
             android:key="checkBox"
             android:summary="On/Off"
             android:title="Keep me logged in" />
+        <EditTextPreference
+            android:key="username"
+            android:summary="Please enter your login username"
+            android:title="Username" />
 
         <ListPreference
             android:entries="@array/listOptions"

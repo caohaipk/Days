@@ -103,7 +103,7 @@ public class DatesCalculator extends Fragment {
     private void initStartDate(){
         SQLiteHandler handler = new SQLiteHandler(getActivity());
         SQLiteDatabase db = handler.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM QL_ANY",null);
+        Cursor cursor = db.rawQuery("SELECT * FROM QL_ANI",null);
         if (cursor.getCount()>0){
             cursor.moveToFirst();
             String startDate = cursor.getString(cursor.getColumnIndex("STARTDATE"));

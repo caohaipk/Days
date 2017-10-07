@@ -7,14 +7,16 @@ package com.wordpress.grayfaces.days.models;
 
 public class Anniversary {
     private int ID;
-    private String Person1, Person2, Title, StartDate;
+    private String Person1, Person2, Title, StartDate, TopText, BottomText;
     public Anniversary(){}
-    public Anniversary(int id,String person1,String person2,String title, String startDate){
+    public Anniversary(int id,String person1,String person2,String title, String startDate, String topText, String bottomText){
         ID = id;
         Person1 = person1;
         Person2 = person2;
         Title = title;
         StartDate = startDate;
+        TopText = topText;
+        BottomText = bottomText;
     }
 
     public int getID() {
@@ -55,5 +57,21 @@ public class Anniversary {
 
     public void setStartDate(String startDate) {
         StartDate = startDate;
+    }
+
+    public String getTopText() {
+        return TopText;
+    }
+
+    public void setTopText(String topText) {
+        TopText = topText;
+    }
+
+    public String getBottomText() {
+        return BottomText;
+    }
+
+    public void setBottomText(String bottomText) {
+        BottomText = bottomText;
     }
 }

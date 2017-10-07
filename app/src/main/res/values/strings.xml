@@ -9,11 +9,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="from">From</string>
     <string name="th_is">th is</string>
-    <string name="choose_day">Choose day...</string>
+    <string name="choose_day">Choose day…</string>
     <string name="calculator">Calculator</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="input_content">Input content</string>
+    <string name="not_entered_content">Not entered content</string>
+    <string name="this_ani_settings">This Anniversary Settings</string>
+    <string name="using_password">Using Password</string>
+    <string name="on_off">On/Off</string>
+    <string name="sercurity">Security</string>
 
 
 </resources>

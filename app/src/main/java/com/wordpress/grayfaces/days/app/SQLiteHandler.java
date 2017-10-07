@@ -25,8 +25,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE `APP_SETTING` ( `ISNOTIFY100D` BOOLEAN, `ISNOTIFYANI` BOOLEAN, `ISUSEPASSWORD` BOOLEAN,`PASSWORD` NVARCHAR(6) )");
-        db.execSQL("CREATE TABLE `QL_ANY` ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT, `PERSON1` NVARCHAR(50),`PERSON2` NVARCHAR(50),`TITLE` NVARCHAR(50), `STARTDATE` NVARCHAR(50) )");
+        db.execSQL("CREATE TABLE IF EXISTS APP_SETTING ( ISNOTIFY100D BOOLEAN, ISNOTIFYANI BOOLEAN, ISUSEPASSWORD BOOLEAN,PASSWORD NVARCHAR(6) )");
+        db.execSQL("CREATE TABLE IF EXISTS QL_ANI ( ID INTEGER PRIMARY KEY AUTOINCREMENT, PERSON1 NVARCHAR(50),PERSON2 NVARCHAR(50),TITLE NVARCHAR(50), STARTDATE NVARCHAR(50),TOPTEXT NVARCHAR(100), BOTTOMTEXT NVARCHAR(100) )");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -62,12 +62,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put("PERSON2", anniversary.getPerson2());
         values.put("TITLE", anniversary.getTitle());
         values.put("STARTDATE", anniversary.getStartDate());
-        db.insert("QL_ANY", null, values);
+        values.put("TOPTEXT", anniversary.getTopText());
+        values.put("BOTTOMTEXT", anniversary.getBottomText());
+        db.insert("QL_ANI", null, values);
         db.close();
     }
     public int countAni(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT ID FROM QL_ANY",null);
+        Cursor cursor = db.rawQuery("SELECT ID FROM QL_ANI",null);
         int count = cursor.getCount();
         cursor.close();
         db.close();
@@ -75,7 +77,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
     public List<Anniversary> getAllAni(){
         List<Anniversary> aniList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM QL_ANY" ;
+        String selectQuery = "SELECT  * FROM QL_ANI" ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -96,11 +98,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
     public Anniversary getAni(int id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("QL_ANY",null,"ID=?",new String[]{String.valueOf(id)},null,null,null );
+        Cursor cursor = db.query("QL_ANI",null,"ID=?",new String[]{String.valueOf(id)},null,null,null );
         Anniversary ani = null;
         if (cursor!=null){
             cursor.moveToFirst();
-            ani = new Anniversary(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+            ani = new Anniversary(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6));
             cursor.close();
         }
         return ani;

@@ -17,26 +17,37 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:weightSum="3"
             android:gravity="center">
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
+            <com.wordpress.grayfaces.days.ui.SquareImageView
+                android:id="@+id/imageP1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/happy_boy"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:weightSum="3"
             android:gravity="center">
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
+            <com.wordpress.grayfaces.days.ui.SquareImageView
+                android:id="@+id/imageP2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/tongue_girl" />
         </LinearLayout>
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/main_txtTopText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/main_txtCountDay"
+        android:layout_marginBottom="7dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"/>
     <TextView
         android:id="@+id/main_txtCountDay"
         android:layout_width="wrap_content"
@@ -45,6 +56,14 @@
         android:layout_centerHorizontal="true"
         android:textSize="26sp"
         android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/main_txtBottomText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_txtCountDay"
+        android:layout_marginTop="7dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,12 +79,13 @@
             android:layout_weight="0.5"
             android:gravity="center"/>
         <ProgressBar
-            android:id="@+id/progressbarNext100d"
+            android:id="@+id/main_progressbarNext100d"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="9"
             android:max="100"
+            android:layout_gravity="center"
             android:progress="100"/>
         <TextView
             android:id="@+id/main_txtRight"

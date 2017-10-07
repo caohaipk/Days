@@ -2,8 +2,11 @@ package com.wordpress.grayfaces.days.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.Context;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import com.wordpress.grayfaces.days.R;
 import com.wordpress.grayfaces.days.app.Config;
 import com.wordpress.grayfaces.days.app.SQLiteHandler;
+import com.wordpress.grayfaces.days.dialog.dialogChangeText;
 import com.wordpress.grayfaces.days.models.Anniversary;
 
 import java.text.SimpleDateFormat;
@@ -24,27 +28,19 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
+//import android.support.v4.app.Fragment;
+//import android.support.v4.app.FragmentManager;
+
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    private TextView txtCountDay,txtLeft,txtRight;
+    private TextView txtCountDay,txtLeft,txtRight,txtTopText,txtBottomText;
     private ProgressBar progressBarNext100d;
     private final String TAG = "MainActivity";
 
@@ -63,20 +59,23 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        /*Bundle args = new Bundle();
+        args.putString("", param1);
+        args.putString("", param2);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
+        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getActivity());
+        boolean syncConnPref = sharedPreferences.getBoolean("isusepassword", false);
+        System.out.println("home " +syncConnPref);
     }
 
     @Override
@@ -94,11 +93,14 @@ public class HomeFragment extends Fragment {
         txtCountDay = (TextView) view.findViewById(R.id.main_txtCountDay);
         txtLeft = (TextView) view.findViewById(R.id.main_txtLeft);
         txtRight = (TextView) view.findViewById(R.id.main_txtRight);
-        progressBarNext100d = (ProgressBar) view.findViewById(R.id.progressbarNext100d);
-        initDaysAni();
+        progressBarNext100d = (ProgressBar) view.findViewById(R.id.main_progressbarNext100d);
+        txtTopText = (TextView) view.findViewById(R.id.main_txtTopText);
+        txtBottomText = (TextView) view.findViewById(R.id.main_txtBottomText);
+        Context context = getActivity();
+        initDaysAni(context);
     }
-    private void initDaysAni(){
-        final SQLiteHandler handler = new SQLiteHandler(getContext());
+    private void initDaysAni(final Context context){
+        final SQLiteHandler handler = new SQLiteHandler(context);
         if (handler.countAni()>0){
             Anniversary ani = handler.getAni(1);
             Date now = Calendar.getInstance().getTime();
@@ -114,6 +116,7 @@ public class HomeFragment extends Fragment {
             long diff = (now.getTime()-aniDate.getTime());
             long countDates = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
             long countLeft,countRight;
+            int processPercent;
             if (countDates<99){
                 countLeft=0;
 
@@ -121,22 +124,26 @@ public class HomeFragment extends Fragment {
                 countLeft=countDates/100*100;
             }
             countRight=countLeft+100;
+            processPercent=(int) countDates%100;
             txtCountDay.setText(String.format("%sd", String.valueOf(countDates)));
             txtLeft.setText(String.format("%sd", String.valueOf(countLeft)));
             txtRight.setText(String.format("%sd", String.valueOf(countRight)));
-            progressBarNext100d.setProgress((int)(countRight-countDates));
+            progressBarNext100d.setProgress(processPercent);
+            txtTopText.setText(String.format("%s",ani.getTopText()));
+            txtBottomText.setText(String.format("%s",ani.getBottomText()));
+            setViewObjectChange(context,ani.getID());
         } else {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DATE);
-            DatePickerDialog datePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datePicker = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     String date = String.valueOf(dayOfMonth)+"/"+String.valueOf(monthOfYear+1)+"/"+String.valueOf(year);
-                    Anniversary aniSet = new Anniversary(0,"Boy","Girl","",date);
+                    Anniversary aniSet = new Anniversary(0,"Boy","Girl","",date,"We'd been together","Happy and sad");
                     handler.addAni(aniSet);
-                    initDaysAni();
+                    initDaysAni(context);
                 }
             },year,month,day);
             datePicker.setTitle(getString(R.string.choose_day));
@@ -147,35 +154,63 @@ public class HomeFragment extends Fragment {
             dFragment.show(getFragmentManager(), "Date Picker");*/
         }
     }
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void setViewObjectChange(final Context context, final int ID){
+        txtTopText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getFragmentManager();
+                final dialogChangeText changeText = dialogChangeText.newInstance("TopText", txtTopText.getText().toString());
+                changeText.setCancelable(false);
+                changeText.setOnDialogFrmCilckListener(new dialogChangeText.OnDialogFragmentClickListener() {
+                    @Override
+                    public void onOkClicked(dialogChangeText dialog, String content) {
+                        SQLiteHandler handler = new SQLiteHandler(context);
+                        SQLiteDatabase db = handler.getWritableDatabase();
+                        ContentValues values = new ContentValues();
+                        values.put("TOPTEXT",content);
+                        int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
+                        if (rowsUpdated>0){
+                            txtTopText.setText(content);
+                        }
+                        changeText.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelClicked(dialogChangeText dialog) {
+                        changeText.dismiss();
+                    }
+                });
+                changeText.show(fm,"avc");
+            }
+        });
+        txtBottomText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getFragmentManager();
+                final dialogChangeText changeText = dialogChangeText.newInstance("BottomText", txtBottomText.getText().toString());
+                changeText.setCancelable(false);
+                changeText.setOnDialogFrmCilckListener(new dialogChangeText.OnDialogFragmentClickListener() {
+                    @Override
+                    public void onOkClicked(dialogChangeText dialog, String content) {
+                        SQLiteHandler handler = new SQLiteHandler(context);
+                        SQLiteDatabase db = handler.getWritableDatabase();
+                        ContentValues values = new ContentValues();
+                        values.put("BOTTOMTEXT",content);
+                        int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
+                        if (rowsUpdated>0){
+                            txtBottomText.setText(content);
+                        }
+                        changeText.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelClicked(dialogChangeText dialog) {
+                        changeText.dismiss();
+                    }
+                });
+                changeText.show(fm,"avc");
+            }
+        });
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
