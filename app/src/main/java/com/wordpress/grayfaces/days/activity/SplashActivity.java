@@ -21,16 +21,12 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        /*SharedPreferences sharedPreferences = getSharedPreferences("com.wordpress.grayfaces.days_preferences",MODE_PRIVATE);
-        boolean isUsedPassword = sharedPreferences.getBoolean("checkBox ",false);*/
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(SplashActivity.this);
         boolean isUsedPassword = sharedPreferences.getBoolean("isusepassword", false);
-        System.out.println("home " +isUsedPassword);
         if (isUsedPassword){
             final String password = sharedPreferences.getString("password","password");
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("PASSWORD")
-                    .setMessage("Enter Password")
                     .setCancelable(false);
             final EditText input = new EditText(this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

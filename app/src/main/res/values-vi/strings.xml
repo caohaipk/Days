@@ -17,4 +17,6 @@
     <string name="using_password">Sử dụng mật khẩu</string>
     <string name="on_off">Bật/Tắt</string>
     <string name="sercurity">Bảo mật</string>
+    <string name="enter_password">Nhập mật khẩu của bạn</string>
+    <string name="password">Mật khẩu</string>
 </resources>

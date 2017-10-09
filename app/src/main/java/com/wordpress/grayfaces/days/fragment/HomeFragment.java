@@ -1,11 +1,11 @@
 package com.wordpress.grayfaces.days.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wordpress.grayfaces.days.R;
 import com.wordpress.grayfaces.days.app.Config;
 import com.wordpress.grayfaces.days.app.SQLiteHandler;
-import com.wordpress.grayfaces.days.dialog.dialogChangeText;
 import com.wordpress.grayfaces.days.models.Anniversary;
 
 import java.text.SimpleDateFormat;
@@ -27,8 +29,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 //import android.support.v4.app.Fragment;
 //import android.support.v4.app.FragmentManager;
@@ -73,9 +73,7 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getActivity());
-        boolean syncConnPref = sharedPreferences.getBoolean("isusepassword", false);
-        System.out.println("home " +syncConnPref);
+
     }
 
     @Override
@@ -158,57 +156,77 @@ public class HomeFragment extends Fragment {
         txtTopText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getActivity().getFragmentManager();
-                final dialogChangeText changeText = dialogChangeText.newInstance("TopText", txtTopText.getText().toString());
-                changeText.setCancelable(false);
-                changeText.setOnDialogFrmCilckListener(new dialogChangeText.OnDialogFragmentClickListener() {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(R.string.input_content)
+                        .setCancelable(false);
+                final EditText input = new EditText(getActivity());
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                dialog.setView(input);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onOkClicked(dialogChangeText dialog, String content) {
-                        SQLiteHandler handler = new SQLiteHandler(context);
-                        SQLiteDatabase db = handler.getWritableDatabase();
-                        ContentValues values = new ContentValues();
-                        values.put("TOPTEXT",content);
-                        int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
-                        if (rowsUpdated>0){
-                            txtTopText.setText(content);
+                    public void onClick(DialogInterface dialog, int which) {
+                        String inputValue = input.getText().toString();
+                        if (inputValue.equals("")){
+                            Toast.makeText(getActivity(), "Chưa nhập mật khẩu!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            SQLiteHandler handler = new SQLiteHandler(context);
+                            SQLiteDatabase db = handler.getWritableDatabase();
+                            ContentValues values = new ContentValues();
+                            values.put("TOPTEXT",inputValue);
+                            int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
+                            if (rowsUpdated>0){
+                                txtTopText.setText(inputValue);
+                            }
                         }
-                        changeText.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelClicked(dialogChangeText dialog) {
-                        changeText.dismiss();
                     }
                 });
-                changeText.show(fm,"avc");
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
             }
         });
         txtBottomText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getActivity().getFragmentManager();
-                final dialogChangeText changeText = dialogChangeText.newInstance("BottomText", txtBottomText.getText().toString());
-                changeText.setCancelable(false);
-                changeText.setOnDialogFrmCilckListener(new dialogChangeText.OnDialogFragmentClickListener() {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(R.string.input_content)
+                        .setCancelable(false);
+                final EditText input = new EditText(getActivity());
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                dialog.setView(input);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onOkClicked(dialogChangeText dialog, String content) {
-                        SQLiteHandler handler = new SQLiteHandler(context);
-                        SQLiteDatabase db = handler.getWritableDatabase();
-                        ContentValues values = new ContentValues();
-                        values.put("BOTTOMTEXT",content);
-                        int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
-                        if (rowsUpdated>0){
-                            txtBottomText.setText(content);
+                    public void onClick(DialogInterface dialog, int which) {
+                        String inputValue = input.getText().toString();
+                        if (inputValue.equals("")){
+                            Toast.makeText(getActivity(), "Chưa nhập mật khẩu!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            SQLiteHandler handler = new SQLiteHandler(context);
+                            SQLiteDatabase db = handler.getWritableDatabase();
+                            ContentValues values = new ContentValues();
+                            values.put("BOTTOMTEXT", inputValue);
+                            int rowsUpdated = db.update("QL_ANI",values,"ID=?",new String[]{String.valueOf(ID)} );
+                            if (rowsUpdated>0){
+                                txtBottomText.setText(inputValue);
+                            }
                         }
-                        changeText.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelClicked(dialogChangeText dialog) {
-                        changeText.dismiss();
                     }
                 });
-                changeText.show(fm,"avc");
+                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
             }
         });
     }

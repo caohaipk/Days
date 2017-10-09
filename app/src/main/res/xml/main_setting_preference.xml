@@ -23,6 +23,11 @@
             android:summary="@string/on_off"
             android:title="@string/using_password"
             android:defaultValue="true"/>
+        <EditTextPreference
+            android:key="password"
+            android:summary="@string/enter_password"
+            android:title="@string/password"
+            android:defaultValue="@string/password"/>
     </PreferenceCategory>
 
     <!--<PreferenceCategory

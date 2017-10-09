@@ -20,6 +20,8 @@
     <string name="using_password">Using Password</string>
     <string name="on_off">On/Off</string>
     <string name="sercurity">Security</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="password">Password</string>
 
 
 </resources>

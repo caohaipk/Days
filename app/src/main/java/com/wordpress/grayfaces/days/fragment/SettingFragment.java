@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import com.wordpress.grayfaces.days.R;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
 /**
  * Project Days
  * Created by Gray on 9/12/2017.
@@ -25,9 +23,7 @@ public class SettingFragment extends PreferenceFragment implements OnSharedPrefe
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getActivity());
-        boolean syncConnPref = sharedPreferences.getBoolean("isusepassword", false);
-        System.out.println("isusepassword" +syncConnPref);
+
         addPreferencesFromResource(R.xml.main_setting_preference);
         PreferenceManager.setDefaultValues(getActivity(), R.xml.main_setting_preference, false);
     }
@@ -61,7 +57,6 @@ public class SettingFragment extends PreferenceFragment implements OnSharedPrefe
                 dialog.show();
             } else {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("password");
                 editor.commit();
             }
             Preference connectionPref = findPreference(key);
